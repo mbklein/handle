@@ -8,10 +8,10 @@ Gem::Specification.new do |spec|
   spec.version       = Handle::VERSION
   spec.authors       = ["Michael Klein"]
   spec.email         = ["mbklein@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.description   = %q{Ruby classes for interfacing with Handle System servers}
+  spec.summary       = %q{Ruby classes for interfacing with Handle System servers}
+  spec.homepage      = "https:/github.com/mbklein/handle"
+  spec.license       = "Apache 2"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
