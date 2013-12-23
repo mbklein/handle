@@ -125,4 +125,5 @@ module Handle
 
     end
   end
+  Connection = Command::Connection
 end

@@ -1,7 +1,7 @@
 module Handle
   module Command
     module Persistence
-      attr_reader :handle
+      attr_accessor :handle
       attr_accessor :connection
 
       def to_batch
@@ -28,17 +28,24 @@ module Handle
         end
 
         if save_handle == self.handle
-          original = connection.resolve_handle(save_handle)
-          actions = original | self
-          actions.each_value { |v| v.connection = connection }
-          [:delete,:update,:add].each do |action|
-            unless actions[action].empty?
-              connection.send("#{action}_handle_values".to_sym, save_handle, actions[action])
+          begin
+            original = connection.resolve_handle(save_handle)
+            actions = original | self
+            actions.each_value { |v| v.connection = connection }
+            [:delete,:update,:add].each do |action|
+              unless actions[action].empty?
+                connection.send("#{action}_handle_values".to_sym, save_handle, actions[action])
+              end
+            end
+          rescue Handle::HandleError => err
+            if err.message == 'Handle not found'
+              connection.create_handle(save_handle, self)
+              @handle = save_handle
             end
           end
         else
           connection.create_handle(save_handle, self)
-          @handle = new_handle
+          @handle = save_handle
         end
         self
       end

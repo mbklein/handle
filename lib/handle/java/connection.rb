@@ -4,6 +4,10 @@ module Handle
       # A more Ruby-ish HSAdapter
 
       def initialize(handle, index, *auth)
+        # accept either a key file or the key itself
+        if auth.length == 2 and (not auth[0].bytes.to_a.include?(0)) and File.exists?(auth[0])
+          auth[0] = File.read(auth[0])
+        end
         auth_params = auth.collect { |p| p.to_java_bytes }
         protect {
           @conn = Native::HSAdapterFactory.new_instance(handle, index, *auth_params)
@@ -82,4 +86,5 @@ module Handle
       end
     end
   end
+  Connection = Java::Connection
 end
