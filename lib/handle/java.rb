@@ -6,7 +6,9 @@ Dir[File.join(hdl_home,'lib','*.jar')].each { |f| require f }
 module Handle
   module Java
     module Native
-      include_package 'net.handle.hdllib'
+      java_import     'net.handle.hdllib.HandleException'
+      java_import     'net.handle.hdllib.HandleValue'
+      java_import     'net.handle.api.HSAdapter'
       java_import     'net.handle.api.HSAdapterFactory'
     end
   end

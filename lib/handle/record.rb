@@ -67,6 +67,10 @@ module Handle
       result
     end
 
+    def ==(other)
+      self.to_a == other.to_a
+    end
+
     def method_missing(sym, *args, &block)
       if @fields.respond_to?(sym)
         @fields.send(sym, *args, &block)
