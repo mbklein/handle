@@ -11,6 +11,9 @@ module Handle
     require 'handle/command'
     Record.send(:include, Handle::Command::Persistence)
   end
+  persistence_module = Module.const_defined?('JRuby') ? 'java' : 'command'
+  require "handle/#{persistence_module}"
+  Record.send(:include, Handle::Persistence)
   class HandleError < Exception
     def initialize msg=nil
       unless msg.nil?

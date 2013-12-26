@@ -45,5 +45,6 @@ module Handle
       end
     end
   end
+  Persistence = Java::Persistence
 end
 

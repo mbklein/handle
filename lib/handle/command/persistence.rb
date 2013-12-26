@@ -55,5 +55,6 @@ module Handle
       end
     end
   end
+  Persistence = Command::Persistence
 end
 
