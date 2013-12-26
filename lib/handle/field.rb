@@ -31,7 +31,7 @@ module Handle
         end
 
         def from_string(str)
-          attrs, perms, data = str.scan(/^\s*(.+) ([rw\-]+) "(.+)"$/).flatten
+          attrs, perms, data = str.scan(/^\s*(.+) ([10rw\-]+) "(.+)"$/).flatten
           attrs = attrs.split(/\s+/).inject({}) { |hash,attr| 
             (k,v) = attr.split(/\=/,2) 
             hash[k.to_sym] = v
@@ -42,7 +42,7 @@ module Handle
             klass = @@value_types[type]
             result = klass.new
             result.merge!(attrs)
-            result.perms.bitmask = perms.gsub(/./) { |m| m =~ /-/ ? '0' : '1' }.to_i(2)
+            result.perms.bitmask = perms.gsub(/./) { |m| m =~ /[0\-]/ ? '0' : '1' }.to_i(2)
             result.value = data
             result
           else
@@ -63,6 +63,10 @@ module Handle
         @index = self.class.default_index
         @ttl = 86400
         @perms = Handle::Permissions.new(:admin_read, :admin_write, :public_read, :public_write, 0b1110)
+      end
+
+      def ==(other)
+        self.to_s == other.to_s
       end
 
       def index=(value)
@@ -100,7 +104,7 @@ module Handle
       end
 
       def to_s
-        " index=#{self.index} type=#{self.class.value_type} ttl=#{self.ttl} perms=#{self.perms} value=#{self.value.inspect}"
+        " index=#{self.index} type=#{self.class.value_type} ttl=#{self.ttl} #{self.perms} #{self.value.inspect}"
       end
 
       def value_str

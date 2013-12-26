@@ -30,13 +30,19 @@ module Handle
       end
 
       def value=(bytes)
-        if bytes =~ /^[0-9A-Fa-f]+$/
-          bytes = bytes.scan(/../).map(&:hex).pack('C*')
+        if bytes =~ /^([0-9]+):([01]+):(.+)$/
+          self.admin_index = $1.to_i
+          self.admin_perms.bitmask = $2.to_i(2)
+          self.admin_handle = $3
+        else
+          if bytes =~ /^[0-9A-Fa-f]+$/
+            bytes = bytes.scan(/../).map(&:hex).pack('C*')
+          end
+          values = bytes.unpack('nnnZ*cn')
+          self.admin_perms.bitmask = values[0]
+          self.admin_handle = values[3]
+          self.admin_index = values[5] unless values[5].nil? or values[5] == 0
         end
-        values = bytes.unpack('nnnZ*cn')
-        self.admin_perms.bitmask = values[0]
-        self.admin_handle = values[3]
-        self.admin_index = values[5] unless values[5].nil? or values[5] == 0
       end
 
       def to_h
@@ -50,7 +56,7 @@ module Handle
       end      
 
       def to_s
-        " index=#{self.index} type=#{self.class.value_type} ttl=#{self.ttl} perms=#{self.perms} value=#{value_str.inspect}"
+        " index=#{self.index} type=#{self.class.value_type} ttl=#{self.ttl} #{self.perms} #{value_str.inspect}"
       end
 
       def admin_index=(value)
