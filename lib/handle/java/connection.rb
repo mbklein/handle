@@ -29,6 +29,7 @@ module Handle
       def create_record(handle)
         result = Handle::Record.new
         result.connection = self
+        result.handle = handle
         result
       end
 
@@ -52,7 +53,7 @@ module Handle
           )
           result = Handle::Record.from_data(java_response)
           result.connection = self
-          result.instance_variable_set(:@handle,handle)
+          result.handle = handle
           result
         }
       end
@@ -78,7 +79,11 @@ module Handle
         begin
           response = yield
         rescue Native::HandleException => err
-          exception = Handle::HandleError.new err.message
+          exception_klass = case err.getCode()
+          when 9 then Handle::NotFound
+          else        Handle::HandleError
+          end
+          exception = exception_klass.new err.message
           exception.set_backtrace(caller)
           raise exception
         end

@@ -4,13 +4,6 @@ require "handle/field"
 require "handle/field/admin"
 
 module Handle
-  if Module.const_defined? 'JRuby'
-    require 'handle/java'
-    Record.send(:include, Handle::Java::Persistence)
-  else
-    require 'handle/command'
-    Record.send(:include, Handle::Command::Persistence)
-  end
   persistence_module = Module.const_defined?('JRuby') ? 'java' : 'command'
   require "handle/#{persistence_module}"
   Record.send(:include, Handle::Persistence)
@@ -22,4 +15,5 @@ module Handle
       super msg
     end
   end
+  class NotFound < HandleError; end
 end
