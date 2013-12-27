@@ -1,4 +1,4 @@
-# Handle
+# Handle [![Build Status](https://secure.travis-ci.org/mbklein/handle.png)](http://travis-ci.org/mbklein/handle)
 
 Classes and methods for dealing with [Handle System](http://handle.net/) servers and handles. 
 
