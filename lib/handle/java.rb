@@ -1,6 +1,6 @@
 require 'java'
 # Load all jarfiles in $HDL_HOME/lib
-hdl_home = ENV['HDL_HOME'] || '/usr/local/handle'
+hdl_home = ENV['HDL_HOME'] || File.expand_path('../../../vendor/handle',__FILE__)
 Dir[File.join(hdl_home,'lib','*.jar')].each { |f| require f }
 
 module Handle

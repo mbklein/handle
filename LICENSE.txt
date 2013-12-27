@@ -1,3 +1,5 @@
+HANDLE RUBY GEM
+===============
 Copyright (c) 2013 Michael Klein
 
 MIT License
@@ -20,3 +22,13 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+HANDLE SYSTEM AND JAVA LIBRARIES
+================================
+HANDLE SYSTEM, HANDLE.NET, HDL, HDL.NET, and GLOBAL HANDLE REGISTRY are trademarks owned by CNRI. 
+
+Copyright © Corporation for National Research Initiatives 2013; All Rights Reserved.
+
+Made available under the Handle System Public License Agreement v.2 
+< http://hdl.handle.net/4263537/5030 >
