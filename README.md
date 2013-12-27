@@ -28,14 +28,21 @@ Or install it yourself as:
 ```ruby
 require 'handle'
 
-conn = Handle::Connection.new('0.NA/admin.handle', 300, '/path/to/private/key/file', 'privkey-passphrase')
+# Set up an authenticated connection
+conn = Handle::Connection.new('0.NA/admin.handle', 300, 
+  '/path/to/private/key/file', 'privkey-passphrase')
 
+# Create an empty record
 record = conn.create_record('handle.prefix/new.handle')
+
+# Two ways to add fields
 record.add(:URL, 'http://example.edu/').index = 2
 record.add(:Email, 'someone@example.edu').index = 6
 record << Handle::Field::HSAdmin.new('0.NA/admin.handle')
+
+# Manipulate permissions
 record.last.perms.public_read = false
-record.handle = test_handle
+
 record.save
 
 record = conn.resolve_handle('handle.prefix/new.handle')
