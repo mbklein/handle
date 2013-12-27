@@ -1,6 +1,13 @@
 # Handle
 
-TODO: Write a gem description
+Classes and methods for dealing with [Handle System](http://handle.net/) servers and handles. 
+
+## Platform Notes
+
+`Handle::Connection` and `Handle::Persistence` have two implementations each – one for JRuby,
+and one for everything else. Under JRuby, it calls Java HSAdapter methods directly. Under MRI 
+or other non-JVM rubies, it shells out to command line tools (particularly `hdl-qresolver` 
+and `hdl-genericbatch`) behind the scenes to do its work.
 
 ## Installation
 
@@ -18,7 +25,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'handle'
+
+conn = Handle::Connection.new('0.NA/admin.handle', 300, '/path/to/private/key/file', 'privkey-passphrase')
+
+record = conn.create_record('handle.prefix/new.handle')
+record.add(:URL, 'http://example.edu/').index = 2
+record.add(:Email, 'someone@example.edu').index = 6
+record << Handle::Field::HSAdmin.new('0.NA/admin.handle')
+record.last.perms.public_read = false
+record.handle = test_handle
+record.save
+
+record = conn.resolve_handle('handle.prefix/new.handle')
+```
 
 ## Contributing
 
