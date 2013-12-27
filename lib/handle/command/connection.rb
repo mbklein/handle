@@ -60,7 +60,7 @@ module Handle
     end
 
     class Connection
-      def initialize(handle, index, *auth)
+      def initialize(handle, index, *auth, &block)
         @handle = handle
         @index  = index
         @auth_params = auth
@@ -103,6 +103,7 @@ module Handle
       def create_record(handle)
         result = Handle::Record.new
         result.connection = self
+        result.handle = handle
         result
       end
 
@@ -113,11 +114,15 @@ module Handle
           response = response.lines.select { |line| line =~ /^\s*index=/ }.join("")
           result = Handle::Record.from_data(response)
           result.connection = self
-          result.instance_variable_set(:@handle,handle)
+          result.handle = handle
           result
         else
-          message = response.lines.to_a.last.split(/:\s*/).last
-          exception = Handle::HandleError.new message
+          (code, message) = response.lines.to_a.last.scan(/Error\(([0-9]+)\): (.+)$/).flatten
+          exception_klass = case code.to_i
+          when 100 then Handle::NotFound
+          else          Handle::HandleError
+          end
+          exception = exception_klass.new message
           exception.set_backtrace(caller)
           raise exception
         end

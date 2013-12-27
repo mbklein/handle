@@ -1,8 +1,7 @@
 module Handle
   module Command
     module Persistence
-      attr_accessor :handle
-      attr_accessor :connection
+      attr_accessor :handle, :connection
 
       def to_batch
         self.collect do |field|
@@ -24,7 +23,7 @@ module Handle
       def save(new_handle=nil)
         save_handle = new_handle || self.handle
         if save_handle.nil?
-          raise "No handle provided."
+          raise Handle::HandleError.new("No handle provided.")
         end
 
         if save_handle == self.handle
@@ -37,11 +36,9 @@ module Handle
                 connection.send("#{action}_handle_values".to_sym, save_handle, actions[action])
               end
             end
-          rescue Handle::HandleError => err
-            if err.message == 'Handle not found'
-              connection.create_handle(save_handle, self)
-              @handle = save_handle
-            end
+          rescue Handle::NotFound
+            connection.create_handle(save_handle, self)
+            @handle = save_handle
           end
         else
           connection.create_handle(save_handle, self)
