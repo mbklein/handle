@@ -5,7 +5,7 @@ on_cruby do
     (cmd, fname, redirect) = command.split(/\s+/,3)
     File.read(fname).split(/\n\n/).collect { |batch| 
       (op, data) = batch.split(/\n/,2)
-      { op: op.strip, data: data.strip }
+      { :op => op.strip, :data => data.strip }
     }
   end
 
