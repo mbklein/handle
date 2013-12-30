@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["mbklein@gmail.com"]
   spec.description   = %q{Ruby classes for interfacing with Handle System servers}
   spec.summary       = %q{Ruby classes for interfacing with Handle System servers}
-  spec.homepage      = "https:/github.com/mbklein/handle"
+  spec.homepage      = "http:/github.com/mbklein/handle"
   spec.license       = "Apache 2"
 
   spec.files         = `git ls-files`.split($/)
