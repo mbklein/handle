@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email            = ["mbklein@gmail.com"]
   spec.description      = %q{Ruby classes for interfacing with Handle System servers}
   spec.summary          = %q{Ruby classes for interfacing with Handle System servers}
-  spec.homepage         = %q{http:/github.com/mbklein/handle}
+  #spec.homepage         = %q{http:/github.com/mbklein/handle}
   spec.license          = %q{Apache 2}
   spec.files            = Dir['lib/**/*.rb'] + ['Gemfile','Rakefile']
   spec.test_files       = Dir['spec/**/*.rb']
