@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'handle/version'
 
 Gem::Specification.new do |spec|
-  spec.name             = %q{handle}
+  spec.name             = %q{handle-system}
   spec.version          = Handle::VERSION
   spec.authors          = ["Michael Klein"]
   spec.email            = ["mbklein@gmail.com"]
