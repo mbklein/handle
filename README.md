@@ -13,7 +13,7 @@ and `hdl-genericbatch`) behind the scenes to do its work.
 
 Add this line to your application's Gemfile:
 
-    gem 'handle'
+    gem 'handle-system'
 
 And then execute:
 
@@ -21,7 +21,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install handle
+    $ gem install handle-system
 
 ## Usage
 
