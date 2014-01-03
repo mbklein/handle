@@ -4,6 +4,8 @@ require "handle/field"
 require "handle/field/admin"
 
 module Handle
+  HOME = ENV['HDL_HOME'] || File.expand_path('../../vendor/handle',__FILE__)
+
   persistence_module = Module.const_defined?('JRuby') ? 'java' : 'command'
   require "handle/#{persistence_module}"
   Record.send(:include, Handle::Persistence)

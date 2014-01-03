@@ -2,8 +2,6 @@ require 'tempfile'
 
 module Handle
   module Command
-    HDL_HOME = ENV['HDL_HOME'] || '/usr/local/handle'
-
     class Batch
       def initialize(handle, index, auth)
         @batch_file = Tempfile.new('hdl') 
@@ -19,7 +17,7 @@ module Handle
 
       def execute!
         @batch_file.close
-        cmd = File.join(HDL_HOME, 'bin', 'hdl-genericbatch')
+        cmd = File.join(Handle::HOME, 'bin', 'hdl-genericbatch')
         output = `#{cmd} #{@batch_file.path} 2>/dev/null`
         results = output.lines.select { |line| line =~ /^=+>/ }
         results.each do |rs|
@@ -108,7 +106,7 @@ module Handle
       end
 
       def resolve_handle(handle, types=[], indexes=[], auth=true)
-        cmd = File.join(HDL_HOME, 'bin', 'hdl-qresolver')
+        cmd = File.join(Handle::HOME, 'bin', 'hdl-qresolver')
         response = `#{cmd} #{handle} 2>/dev/null`.strip
         if response =~ /^Got Response:/
           response = response.lines.select { |line| line =~ /^\s*index=/ }.join("")
