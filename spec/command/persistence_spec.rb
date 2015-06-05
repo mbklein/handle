@@ -1,4 +1,4 @@
-require File.expand_path('../../spec_helper',__FILE__)
+require 'spec_helper'
 
 on_cruby do
   describe Handle::Command::Persistence do
@@ -17,14 +17,14 @@ on_cruby do
     it "#reload" do
       current = subject.to_s
       subject.handle = fake_handle
-      connection.should_receive(:resolve_handle).with(fake_handle) { Handle::Record.from_data(subject.to_s) }
+      expect(connection).to receive(:resolve_handle).with(fake_handle) { Handle::Record.from_data(subject.to_s) }
       subject.reload
       expect(subject.to_s).to eq(current)
     end
 
     it "#destroy" do
       subject.handle = fake_handle
-      connection.should_receive(:delete_handle).with(fake_handle)
+      expect(connection).to receive(:delete_handle).with(fake_handle)
       subject.destroy
     end
 
@@ -34,27 +34,27 @@ on_cruby do
       end
 
       it "nil handle, param" do
-        connection.should_receive(:create_handle).with(fake_handle, subject) { true }
-        expect(subject.save(fake_handle)).to be_true
+        expect(connection).to receive(:create_handle).with(fake_handle, subject) { true }
+        expect(subject.save(fake_handle)).to be_kind_of Handle::Record
       end
 
       it "existing handle, no existing record" do
         subject.handle = fake_handle
         current = subject.to_s
-        connection.should_receive(:resolve_handle).with(fake_handle) { raise Handle::NotFound.new('Handle not found') }
-        connection.should_receive(:create_handle) { |handle, record| expect(record).to eq(subject) }
+        expect(connection).to receive(:resolve_handle).with(fake_handle) { raise Handle::NotFound.new('Handle not found') }
+        expect(connection).to receive(:create_handle) { |handle, record| expect(record).to eq(subject) }
         subject.save
       end
 
       it "change existing record" do
         subject.handle = fake_handle
         current = subject.to_s
-        connection.should_receive(:resolve_handle).with(fake_handle) { Handle::Record.from_data(current) }
+        expect(connection).to receive(:resolve_handle).with(fake_handle) { Handle::Record.from_data(current) }
         subject.delete(subject.find_by_index(6))
         subject.add(:URN, 'info:example:fake-handle')
-        connection.should_receive(:delete_handle_values) { |handle, record| expect(record.length).to eq(1) }
-        connection.should_receive(:add_handle_values)    { |handle, record| expect(record.length).to eq(1) }
-        connection.should_receive(:update_handle_values) { |handle, record| expect(record.length).to eq(2) }
+        expect(connection).to receive(:delete_handle_values) { |handle, record| expect(record.length).to eq(1) }
+        expect(connection).to receive(:add_handle_values)    { |handle, record| expect(record.length).to eq(1) }
+        expect(connection).to receive(:update_handle_values) { |handle, record| expect(record.length).to eq(2) }
         subject.save
       end
     end

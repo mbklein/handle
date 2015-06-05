@@ -5,19 +5,25 @@ describe Handle::Permissions do
 
   it "initialize" do
     expect(subject.bitmask).to eq(0b110)
-    expect(subject).not_to be_foo
-    expect(subject).to be_bar
-    expect(subject).to be_baz
-    expect(subject).not_to be_quux
+    expect(subject.read(:foo)).to be false
+    expect(subject.read(:bar)).to be true
+    expect(subject.read(:baz)).to be true
+    expect(subject.read(:quux)).to be false
   end
 
   it "modify" do
     subject.foo = true
     subject.bar = false
-    expect(subject).to be_foo
-    expect(subject).not_to be_bar
-    expect(subject).to be_baz
-    expect(subject).not_to be_quux
+    expect(subject.read(:foo)).to be true
+    expect(subject.read(:bar)).to be false
+    expect(subject.read(:baz)).to be true
+    expect(subject.read(:quux)).to be false
+  end
+
+  describe "#method_missing" do
+    it "handles accessors" do
+      expect(subject.foo?).to be false
+    end
   end
 
   it "#to_bool" do
