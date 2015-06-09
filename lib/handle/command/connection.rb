@@ -4,7 +4,7 @@ module Handle
   module Command
     class Batch
       def initialize(handle, index, auth)
-        @batch_file = Tempfile.new('hdl') 
+        @batch_file = Tempfile.new('hdl')
         auth_type = auth.length == 2 ? "PUBKEY" : "SECKEY"
         @batch_file.puts "AUTHENTICATE #{auth_type}:#{index}:#{handle}"
         @batch_file.puts auth.select { |p| not (p.nil? or p.empty?) }.join('|')
@@ -15,18 +15,17 @@ module Handle
         @batch_file.unlink
       end
 
+      # Raises an error if any part of the output is a "FAILURE" message
       def execute!
         @batch_file.close
         cmd = File.join(Handle::HOME, 'bin', 'hdl-genericbatch')
         output = `#{cmd} #{@batch_file.path} 2>/dev/null`
         results = output.lines.select { |line| line =~ /^=+>/ }
         results.each do |rs|
-          (status, message) = rs.scan(/^=+>(.+)\[[0-9]+\]: (.+)/).flatten
-          (action, handle, code, message) = message.split(/:\s*/,4)
-          if status == 'FAILURE'
-            exception = Handle::HandleError.new message
-            exception.set_backtrace(caller[3..-1])
-            raise exception
+          if message = ErrorParser.failure_message(rs)
+            raise Handle::HandleError.new(message).tap { |exception|
+              exception.set_backtrace(caller[3..-1])
+            }
           end
         end
         return true
