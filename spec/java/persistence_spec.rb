@@ -39,7 +39,7 @@ on_jruby do
 
       it "nil handle, param" do
         connection.should_receive(:create_handle).with(fake_handle, subject) { true }
-        expect(subject.save(fake_handle)).to be_true
+        expect(subject.save(fake_handle)).to be_truthy
       end
 
       it "existing handle, no existing record" do

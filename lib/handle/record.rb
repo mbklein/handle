@@ -68,6 +68,7 @@ module Handle
     end
 
     def ==(other)
+      self.class == other.class &&
       self.to_a == other.to_a
     end
 

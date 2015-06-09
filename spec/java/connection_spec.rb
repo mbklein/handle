@@ -91,27 +91,27 @@ on_jruby do
 
       it "#create_handle" do
         server.should_receive(:createHandle).with(new_handle, anything()) { true }
-        expect(subject.create_handle(new_handle, record)).to be_true
+        expect(subject.create_handle(new_handle, record)).to be true
       end
 
       it "#add_handle_values" do
         server.should_receive(:addHandleValues).with(new_handle, anything()) { true }
-        expect(subject.add_handle_values(new_handle, record)).to be_true
+        expect(subject.add_handle_values(new_handle, record)).to be true
       end
 
       it "#update_handle_values" do
         server.should_receive(:updateHandleValues).with(new_handle, anything()) { true }
-        expect(subject.update_handle_values(new_handle, record)).to be_true
+        expect(subject.update_handle_values(new_handle, record)).to be true
       end
 
       it "#delete_handle_values" do
         server.should_receive(:deleteHandleValues).with(new_handle, anything()) { true }
-        expect(subject.delete_handle_values(new_handle, record)).to be_true
+        expect(subject.delete_handle_values(new_handle, record)).to be true
       end
 
       it "#delete_handle" do
         server.should_receive(:deleteHandle).with(new_handle) { true }
-        expect(subject.delete_handle(new_handle)).to be_true
+        expect(subject.delete_handle(new_handle)).to be true
       end
     end
   end
