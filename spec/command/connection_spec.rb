@@ -45,29 +45,40 @@ on_cruby do
       let(:server) { double(Handle::Java::Native::HSAdapter) }
       subject { Handle::Command::Connection.new('0.NA/FAKE.ADMIN', 300, 'privkey', 'keypass') }
 
-      it "#resolve_handle" do
-        expect(subject).to receive(:`) { |command|
-          expect(command).to match(/hdl-qresolver #{fake_handle}/)
-          "Got Response:\n#{record.to_s}"
-        }
-        expect(subject.resolve_handle(fake_handle)).to eq(record)
+      describe "#resolve_handle" do
+        it "is successful" do
+          expect(subject).to receive(:`) { |command|
+            expect(command).to match(/hdl-qresolver #{fake_handle}/)
+            "Got Response:\n#{record.to_s}"
+          }
+          expect(subject.resolve_handle(fake_handle)).to eq(record)
+        end
+
+        it "handles not found" do
+          expect(subject).to receive(:`) { |command|
+            expect(command).to match(/hdl-qresolver #{bad_handle}/)
+            "Got Error:\nError(100): HANDLE NOT FOUND"
+          }
+          expect { subject.resolve_handle(bad_handle) }.to raise_error(Handle::NotFound)
+        end
+
+        it "handles other error" do
+          expect(subject).to receive(:`) { |command|
+            expect(command).to match(/hdl-qresolver #{bad_handle}/)
+            "Got Error:\nError(3): SERVER TOO BUSY"
+          }
+          expect { subject.resolve_handle(bad_handle) }.to raise_error(Handle::HandleError)
+        end
+
+        it "handles error on stderr (Bad prefix)" do
+          expect(subject).to receive(:`) { |command|
+            expect(command).to match(/hdl-qresolver #{bad_handle}/)
+            "received HDL-UDP response: Error(100): HANDLE NOT FOUND\n\nError: HandleException (SERVICE_NOT_FOUND) Unable to find service for prefix 0.NA/10427.TEXX; prefix resolution response: Error(100): HANDLE NOT FOUND\nHandleException (SERVICE_NOT_FOUND) Unable to find service for prefix 0.NA/10427.TEXX; prefix resolution response: Error(100): HANDLE NOT FOUND\nat net.handle.hdllib.HandleResolver.tryAuthGlobalServiceLookupAndThrowExceptionOnFailure(HandleResolver.java:804)"
+          }
+          expect { subject.resolve_handle(bad_handle) }.to raise_error(Handle::HandleError)
+        end
       end
 
-      it "#resolve_handle (not found)" do
-        expect(subject).to receive(:`) { |command|
-          expect(command).to match(/hdl-qresolver #{bad_handle}/)
-          "Got Error:\nError(100): HANDLE NOT FOUND"
-        }
-        expect { subject.resolve_handle(bad_handle) }.to raise_error(Handle::NotFound)
-      end
-
-      it "#resolve_handle (other error)" do
-        expect(subject).to receive(:`) { |command|
-          expect(command).to match(/hdl-qresolver #{bad_handle}/)
-          "Got Error:\nError(3): SERVER TOO BUSY"
-        }
-        expect { subject.resolve_handle(bad_handle) }.to raise_error(Handle::HandleError)
-      end
 
       it "#create_record" do
         new_record = subject.create_record(new_handle)
