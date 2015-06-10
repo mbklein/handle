@@ -106,7 +106,7 @@ module Handle
 
       def resolve_handle(handle, types=[], indexes=[], auth=true)
         cmd = File.join(Handle::HOME, 'bin', 'hdl-qresolver')
-        response = `#{cmd} #{handle} 2>/dev/null`.strip
+        response = `#{cmd} #{handle} 2>&1`.strip
         if response =~ /^Got Response:/
           response = response.lines.select { |line| line =~ /^\s*index=/ }.join("")
           result = Handle::Record.from_data(response)
@@ -114,7 +114,7 @@ module Handle
           result.handle = handle
           result
         else
-          (code, message) = response.lines.to_a.last.scan(/Error\(([0-9]+)\): (.+)$/).flatten
+          (code, message) = response.scan(/Error\(([0-9]+)\): (.+)$/).last
           exception_klass = case code.to_i
           when 100 then Handle::NotFound
           else          Handle::HandleError
