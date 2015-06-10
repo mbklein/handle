@@ -58,4 +58,5 @@ record = conn.resolve_handle('handle.prefix/new.handle')
 
 ## History
 
+- v0.1.1 - Fix error handling (h/t [jcoyne](https://github.com/jcoyne))
 - v0.1.0 - First stable release
