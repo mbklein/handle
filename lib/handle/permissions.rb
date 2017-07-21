@@ -3,7 +3,7 @@ module Handle
     attr :bitmask
 
     def initialize(*flags)
-      if flags.last.is_a?(Fixnum)
+      if flags.last.is_a?(Integer)
         @bitmask = flags.pop
       else
         @bitmask = 0
